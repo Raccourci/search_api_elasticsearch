@@ -29,6 +29,7 @@ class SearchApiElasticsearchElasticaMLT {
    * @return void
    */
   private function filterFields(&$fields) {
+    var_dump($fields);
     foreach ($fields as $f => $field) {
       if (!search_api_is_text_type($field['type'])) {
         unset($fields[$f]);
