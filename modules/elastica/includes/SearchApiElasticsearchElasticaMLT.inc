@@ -8,7 +8,7 @@
 class SearchApiElasticsearchElasticaMLT {
 
   static public function build($type, $options, $query) {
-    $this->filterFields($options['mlt']['fields']);
+    self::filterFields($options['mlt']['fields']);
     $mlt_query = new Elastica\Query\MoreLikeThis();
     $mlt_query->setFields(array_values($options['mlt']['fields']));
     $mlt_query->setParam('ids', array($options['mlt']['id']));
