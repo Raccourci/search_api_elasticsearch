@@ -8,6 +8,7 @@
 class SearchApiElasticsearchElasticaMLT {
 
   static public function build($type, $options, $query) {
+    $this->filterFields($options['mlt']['fields']);
     $mlt_query = new Elastica\Query\MoreLikeThis();
     $mlt_query->setFields(array_values($options['mlt']['fields']));
     $mlt_query->setParam('ids', array($options['mlt']['id']));
@@ -17,6 +18,21 @@ class SearchApiElasticsearchElasticaMLT {
 
     if (!empty($options['query_search_filter'])) {
       $query->setQuery(new Elastica\Query\Filtered($mlt_query, $options['query_search_filter']));
+    }
+  }
+
+  /**
+   * More Like This can only use text type fields.
+   *
+   * @param mixed $fields
+   * @access private
+   * @return void
+   */
+  private function filterFields(&$fields) {
+    foreach ($fields as $f => $field) {
+      if (!search_api_is_text_type($field['type'])) {
+        unset($fields[$f]);
+      }
     }
   }
 
