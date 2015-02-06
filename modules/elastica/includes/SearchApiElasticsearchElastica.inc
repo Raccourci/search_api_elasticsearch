@@ -831,11 +831,16 @@ class SearchApiElasticsearchElastica extends SearchApiElasticsearchAbstractServi
       $search_string = $this->flattenKeys($keys, $query_options['parse mode']);
 
       if (!empty($search_string)) {
-        $query_search_string = new Elastica\Query\QueryString($search_string);
+        //Replaced Query Class for respecting index time analyzis
+        $query_search_string = new Elastica\Query\MultiMatch();
         $query_search_string->setFields(array_values($query_full_text_fields));
-        if ($analyzer) {
-          $query_search_string->setParam('analyzer', $analyzer);
-        }
+        $query_search_string->setQuery($search_string);
+      
+        //$query_search_string = new Elastica\Query\QueryString($search_string);
+        //$query_search_string->setFields(array_values($query_full_text_fields));
+        //if ($analyzer) {
+        //  $query_search_string->setParam('analyzer', $analyzer);
+        //}
       }
     }
 
